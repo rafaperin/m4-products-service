@@ -13,6 +13,9 @@ class ProductDTO(CamelModel):
     image_url: str
 
     class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
         schema_extra = {
             "example": {
                 "product_id": "00000000-0000-0000-0000-000000000000",
@@ -33,6 +36,9 @@ class CreateProductDTO(CamelModel):
     image_url: str
 
     class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
         schema_extra = {
             "example": {
                 "name": "Lanche 1",
@@ -52,6 +58,9 @@ class ChangeProductDTO(CamelModel):
     image_url: Optional[str]
 
     class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
         schema_extra = {
             "example": {
                 "name": "Lanche 1",

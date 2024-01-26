@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from src.adapters.product_json_adapter import product_list_to_json, product_to_json
 from src.config.errors import RepositoryError, ResourceNotFound
 from src.entities.schemas.product_dto import CreateProductDTO, ChangeProductDTO
-from src.gateways.postgres_gateways.product_gateway import PostgresDBProductRepository
+from src.gateways.mongodb_gateway.mongodb_gateway import MongoDBProductRepository
 from src.usecases.product_usecase import ProductUseCase
 
 router = APIRouter(tags=["Products"])
@@ -14,13 +14,12 @@ router = APIRouter(tags=["Products"])
 class ProductController:
     @staticmethod
     async def get_all_products() -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             all_products = ProductUseCase(product_gateway).get_all()
             result = product_list_to_json(all_products)
-        except Exception as e:
-            print(e)
+        except Exception:
             raise RepositoryError.get_operation_failed()
 
         return result
@@ -29,7 +28,7 @@ class ProductController:
     async def get_all_products_by_category(
         product_category: str
     ) -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             all_products = ProductUseCase(product_gateway).get_all_by_category(product_category)
@@ -43,7 +42,7 @@ class ProductController:
     async def get_product_by_id(
         product_id: uuid.UUID
     ) -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             product = ProductUseCase(product_gateway).get_by_id(product_id)
@@ -59,7 +58,7 @@ class ProductController:
     async def create_product(
         request: CreateProductDTO
     ) -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             product = ProductUseCase(product_gateway).create(request)
@@ -74,7 +73,7 @@ class ProductController:
         product_id: uuid.UUID,
         request: ChangeProductDTO
     ) -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             product = ProductUseCase(product_gateway).update(product_id, request)
@@ -88,7 +87,7 @@ class ProductController:
     async def remove_product(
         product_id: uuid.UUID
     ) -> dict:
-        product_gateway = PostgresDBProductRepository()
+        product_gateway = MongoDBProductRepository()
 
         try:
             ProductUseCase(product_gateway).remove(product_id)
