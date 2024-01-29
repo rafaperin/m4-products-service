@@ -82,7 +82,8 @@ async def create_product(
 ) -> dict:
     try:
         result = await ProductController.create_product(request)
-    except Exception:
+    except Exception as e:
+        print(e)
         raise RepositoryError.save_operation_failed()
 
     return {"result": result}
